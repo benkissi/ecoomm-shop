@@ -23,7 +23,7 @@ class SignIn extends Component {
         this.setState({email:'', password:''})
     }
 
-    handleChnage = event => {
+    handleChange = event => {
         const { name, value} = event.target
 
         this.setState({[name]: value})
@@ -42,14 +42,14 @@ class SignIn extends Component {
                         value={this.state.email} 
                         required 
                         label='Email'
-                        handleChange={this.handleChnage}/>
+                        handleChange={this.handleChange}/>
                     <FormInput 
                         name='password' 
                         type='password' 
                         value={this.state.password} 
                         required 
                         label='password'
-                        handleChange={this.handleChnage}/>
+                        handleChange={this.handleChange}/>
                     <div className='buttons'>
                         <CustomButton type='submit'>Sign in</CustomButton>
                         <CustomButton onClick={signInWithGoogle} isGoogleSignIn>
