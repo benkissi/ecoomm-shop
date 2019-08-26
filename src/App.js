@@ -10,10 +10,9 @@ import Header from './components/header/header.component'
 import SignInAndSignUp from './pages/sign-in-and-sign-up/sign-in-and-sign-up.component'
 import CheckoutPage from './pages/checkout/checkout.component'
 
-import { auth, createUserProfileDocument } from './firebase/firebase.utils'
-import {setCurrentUser} from './redux/user/user.actions'
 import { selectCurrentUser } from './redux/user/user.selectors'
 import { createStructuredSelector } from 'reselect'
+import { checkUserSession } from './redux/user/user.actions'
 
 
 class App extends Component {
@@ -21,21 +20,22 @@ class App extends Component {
   unsubscribeFromAuth = null
 
   componentDidMount() {
-    const { setCurrentUser }= this.props
-    this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
-      if(userAuth){
-        const userRef = await createUserProfileDocument(userAuth)
+    const { checkUserSession } = this.props
+    checkUserSession()
+    // this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
+    //   if(userAuth){
+    //     const userRef = await createUserProfileDocument(userAuth)
 
-        userRef.onSnapshot(snapshot => {
-          setCurrentUser({
-            id: snapshot.id,
-            ...snapshot.data()
-          })
-        })
+    //     userRef.onSnapshot(snapshot => {
+    //       setCurrentUser({
+    //         id: snapshot.id,
+    //         ...snapshot.data()
+    //       })
+    //     })
         
-      }
-      setCurrentUser(userAuth)
-    })
+    //   }
+    //   setCurrentUser(userAuth)
+    // })
   }
 
   componentWillUnmount() {
@@ -70,8 +70,8 @@ const matchStateToProps = createStructuredSelector({
   currentUser: selectCurrentUser
 })
 
-const matchDispatchToProps = dispatch => ({
-  setCurrentUser: user => dispatch(setCurrentUser(user))
+const mapDispatchToProps = dispatch => ({
+  checkUserSession: () => dispatch(checkUserSession())
 })
 
-export default connect(matchStateToProps, matchDispatchToProps)(App);
+export default connect(matchStateToProps, mapDispatchToProps)(App);
